@@ -1,0 +1,79 @@
+*
+{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    background-color: black;
+    color: white;
+}
+
+.background
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    img
+    {
+        width: 400px;
+        height: auto;
+        position: absolute;
+        transform: translate(-80px, -60px) scale(1.5) rotate(10deg);
+        transform-origin: center center;
+        transition: transform 0.3s ease-out;
+    }
+}
+
+.container
+{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.select
+{
+    width: 80%;
+    margin: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
+    .pokemon-card
+    {
+        width: 135px;
+        height: 150px;
+        list-style-type: none;
+        border: 3px solid white;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        padding: 5px 5px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .pokemon-card:hover
+    {
+        /* maak nog dat de hover de arrowdown overschrijft */
+        cursor: pointer;
+        border-color: grey;
+        transition: 0.3s;
+    }
+}
+
+.card-selected
+{
+    cursor: pointer;
+    border-color: grey;
+    scale: 1.1;
+    transform-origin: left center;
+    transition: 0.3s;
+}
