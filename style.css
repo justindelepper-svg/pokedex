@@ -35,6 +35,16 @@ body
         transform-origin: center center;
         transition: transform 0.3s ease-out;
     }
+
+    .pokemon-art
+    {
+        width: 335px;
+        height: auto;
+        position: absolute;
+        background-size: contain;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
 }
 
 .header

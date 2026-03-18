@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function()
 {
     const responseContainer = document.getElementById('response-container');
+    const pokemonArt = document.querySelector('.pokemon-art');
     const loadTrigger = document.getElementById('load-trigger');
     let offset = 0;
     const limit = 18;
@@ -44,11 +45,13 @@ document.addEventListener('DOMContentLoaded', function()
             const id = pokeData.id;
             const name = pokeData.name.toUpperCase();
             const sprite = pokeData.sprites.front_default;
+            const art = pokeData.sprites.other['official-artwork'].front_default;
             // const sprite2 = pokeData.sprites.versions['generation-iv']['diamond-pearl'].front_default;
             console.log(name, sprite);
 
             const card = document.createElement('div');
             card.classList.add('pokemon-card');
+            card.dataset.art = art;
 
             const imgElement = document.createElement('img');
             imgElement.classList.add('pokemon-sprite');
@@ -67,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function()
             if (index === 0)
             {
                 card.classList.add('card-selected');
+                makePokemonArt(card);
             }
         });
 
@@ -131,6 +135,8 @@ document.addEventListener('DOMContentLoaded', function()
             // Style the new current card
             cards[currentIndex].classList.add('card-selected');
 
+            makePokemonArt(cards[currentIndex]);
+
             cards[currentIndex].scrollIntoView
             ({
                 behavior: 'smooth',
@@ -155,6 +161,8 @@ document.addEventListener('DOMContentLoaded', function()
 
             // Style the new current card
             cards[currentIndex].classList.add('card-selected');
+
+            makePokemonArt(cards[currentIndex]);
 
             cards[currentIndex].scrollIntoView
             ({
@@ -181,6 +189,8 @@ document.addEventListener('DOMContentLoaded', function()
             // Style the new current card
             cards[currentIndex].classList.add('card-selected');
 
+            makePokemonArt(cards[currentIndex]);
+
             cards[currentIndex].scrollIntoView
             ({
                 behavior: 'smooth',
@@ -205,6 +215,8 @@ document.addEventListener('DOMContentLoaded', function()
             // Style the new current card
             cards[currentIndex].classList.add('card-selected');
 
+            makePokemonArt(cards[currentIndex]);
+
             cards[currentIndex].scrollIntoView
             ({
                 behavior: 'smooth',
@@ -212,4 +224,14 @@ document.addEventListener('DOMContentLoaded', function()
             });
         }
     });
+
+    function makePokemonArt(card)
+    {
+        const artUrl = card.dataset.art;
+        if (!artUrl) return;
+
+        pokemonArt.style.opacity = '0';
+        pokemonArt.src = artUrl;
+        pokemonArt.style.opacity = '1';
+    }
 });
