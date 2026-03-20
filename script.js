@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function()
 {
+    const pokedexContainer = document.querySelector('.pokedex-container');
+    const detailContainer = document.querySelector('.detail-container');
     const responseContainer = document.getElementById('response-container');
     const pokemonArt = document.querySelector('.pokemon-art');
     const loadTrigger = document.getElementById('load-trigger');
@@ -39,25 +41,27 @@ document.addEventListener('DOMContentLoaded', function()
         );
 
         const pokeData = await Promise.all(pokemonPromises);
+        console.log("pokeData: ", pokeData);
 
         pokeData.forEach((pokeData, index) =>
         {
-            const id = pokeData.id;
-            const name = pokeData.name.toUpperCase();
-            const sprite = pokeData.sprites.front_default;
-            const art = pokeData.sprites.other['official-artwork'].front_default;
+            let id = pokeData.id;
+            let name = pokeData.name.toUpperCase();
+            let sprite = pokeData.sprites.front_default;
+            let art = pokeData.sprites.other['official-artwork'].front_default;
             // const sprite2 = pokeData.sprites.versions['generation-iv']['diamond-pearl'].front_default;
             console.log(name, sprite);
 
-            const card = document.createElement('div');
+            let card = document.createElement('div');
             card.classList.add('pokemon-card');
+            card.dataset.id = id;
             card.dataset.art = art;
 
-            const imgElement = document.createElement('img');
+            let imgElement = document.createElement('img');
             imgElement.classList.add('pokemon-sprite');
             imgElement.src = sprite;
                 
-            const textElement = document.createElement('h5');
+            let textElement = document.createElement('h5');
             textElement.classList.add('pokemon-text');
             textElement.textContent = id + ". " + name;
 
@@ -65,6 +69,12 @@ document.addEventListener('DOMContentLoaded', function()
             card.appendChild(textElement);
 
             responseContainer.insertBefore(card, loadTrigger);
+
+            card.addEventListener('click', function()
+            {
+                fillDetail(pokeData);
+                pokedexDetailToggle('none', 'flex');
+            });
 
             // Maak de eerste kaart geselecteerd
             if (index === 0)
@@ -95,6 +105,66 @@ document.addEventListener('DOMContentLoaded', function()
         offset += limit;
         callAPI(offset, limit);
     }
+
+    function pokedexDetailToggle(displayPokedex, displayDetail)
+    {
+        pokedexContainer.style.display = displayPokedex;
+        detailContainer.style.display = displayDetail;
+    }
+
+    // DETAIL
+
+    const backButton = document.querySelector('.back-btn');
+    const nextButton = document.querySelector('.next-btn');
+    const prevButton = document.querySelector('.prev-btn');
+    const sprite = document.querySelector('.pokemon-sprite');
+    const name = document.querySelector('#pokemon-name');
+    const types = document.querySelector('.types');
+    const abilities = document.querySelector('.abilities');
+
+    function fillDetail(pokemon)
+    {
+        sprite.src = pokemon.sprites.front_default;
+
+        let pokemonId = pokemon.id;
+        let pokemonName = pokemon.name.toUpperCase();
+        name.textContent = pokemonId + ". " + pokemonName;
+        
+        let typeList = pokemon.types;
+        typeList.forEach(typeData =>
+        {
+            let pokemonType = typeData.type.name;
+            types.innerHTML += `<span class="type ${pokemonType}">${pokemonType}</span>`;
+        });
+
+        let abilityList = pokemon.abilities;
+        abilityList.forEach(abilityData =>
+        {
+            let pokemonAbility = abilityData.ability.name;
+            abilities.innerHTML += `<li class="ability">${pokemonAbility}</li>`;
+        });
+
+        // verder met stats invullen (nummer en width procent)
+
+        // const statMaxReference =
+        // {
+        //     hp: 255,
+        //     attack: 190,
+        //     defense: 250,
+        //     'special-attack': 194,
+        //     'special-defense': 250,
+        //     speed: 180
+        // };
+
+        // let percent = (baseStat / statMaxReference[statName]) * 100;
+    }
+
+    backButton.addEventListener('click', function()
+    {
+        pokedexDetailToggle('flex', 'none');
+    });
+
+    // detailpagina schoonmaken functie als je terug gaat naar de pokedex of naar een andere pokemon gaat
 
     // -------------------------------------------------------------------------------------------------------------
 

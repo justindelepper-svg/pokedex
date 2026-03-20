@@ -18,9 +18,74 @@
             <button id="search-button" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
     </div>
-    <div class="container">
+    <div class="pokedex-container">
         <div class="select" id="response-container">
             <div id="load-trigger"></div>
+        </div>
+    </div>
+    <div class="detail-container">
+        <!-- TOP BAR -->
+        <div class="detail-top">
+            <button class="back-btn">← Back</button>
+            <div class="nav-buttons">
+                <button class="prev-btn">← Previous</button>
+                <button class="next-btn">Next →</button>
+            </div>
+        </div>
+        <!-- MAIN CONTENT -->
+        <div class="detail-content">
+            <!-- LEFT: IMAGE -->
+            <div class="detail-left">
+                <img class="pokemon-sprite">
+            </div>
+            <!-- RIGHT: INFO -->
+            <div class="detail-right">
+                <h1 id="pokemon-name"></h1>
+                <div class="types">
+                    
+                </div>
+                <div class="section">
+                    <h3>Abilities</h3>
+                    <ul class="abilities">
+
+                    </ul>
+                </div>
+                <div class="section">
+                    <h3>Base Stats</h3>
+                    <div class="stats">
+                        <div class="stat">
+                            <span>HP</span>
+                            <div class="bar"><div id="hpBar"><!-- width opvullen met procent in javascript op basis van ... --></div></div>
+                            <span class="stat-value">35</span>
+                        </div>
+                        <div class="stat">
+                            <span>Attack</span>
+                            <div class="bar"><div id="atkBar"></div></div>
+                            <span class="stat-value">55</span>
+                        </div>
+                        <div class="stat">
+                            <span>Defense</span>
+                            <div class="bar"><div id="defBar"></div></div>
+                            <span class="stat-value">40</span>
+                        </div>
+                        <div class="stat">
+                            <span>Sp. Atk</span>
+                            <div class="bar"><div id="spaBar"></div></div>
+                            <span class="stat-value">50</span>
+                        </div>
+                        <div class="stat">
+                            <span>Sp. Def</span>
+                            <div class="bar"><div id="spdBar"></div></div>
+                            <span class="stat-value">50</span>
+                        </div>
+                        <div class="stat">
+                            <span>Speed</span>
+                            <div class="bar"><div id="speBar"></div></div>
+                            <span class="stat-value">90</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
