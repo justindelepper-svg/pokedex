@@ -222,6 +222,8 @@ document.addEventListener('DOMContentLoaded', function()
         {
             event.preventDefault();
         }
+        
+        let containerWidth = responseContainer.offsetWidth;
 
         const cards = document.querySelectorAll('.pokemon-card');
 
