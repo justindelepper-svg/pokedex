@@ -8,9 +8,16 @@ document.addEventListener('DOMContentLoaded', function()
     let offset = 0;
     const limit = 18;
     let loading = false;
+    let isInitialLoad = true;
+    let width = screen.width;
 
     const observer = new IntersectionObserver(entries =>
     {
+        if (isInitialLoad)
+        {
+            isInitialLoad = false;
+            return;
+        }
         // check of de maximale pokemon is bereikt (1350). als dat zo is, voer dan niet nog een batch uit
         if(entries[0].isIntersecting && !loading)
         {
@@ -73,11 +80,12 @@ document.addEventListener('DOMContentLoaded', function()
             card.addEventListener('click', function()
             {
                 fillDetail(pokeData);
+                makePokemonArt(pokeData);
                 pokedexDetailToggle('none', 'flex');
             });
 
             // Maak de eerste kaart geselecteerd
-            if (index === 0)
+            if (index === 0 && offset === 0)
             {
                 card.classList.add('card-selected');
                 makePokemonArt(card);
@@ -121,12 +129,14 @@ document.addEventListener('DOMContentLoaded', function()
     const name = document.querySelector('#pokemon-name');
     const types = document.querySelector('.types');
     const abilities = document.querySelector('.abilities');
+    let currentPokemonId;
 
     function fillDetail(pokemon)
     {
         sprite.src = pokemon.sprites.front_default;
 
         let pokemonId = pokemon.id;
+        currentPokemonId = pokemonId;
         let pokemonName = pokemon.name.toUpperCase();
         name.textContent = pokemonId + ". " + pokemonName;
         
@@ -162,9 +172,41 @@ document.addEventListener('DOMContentLoaded', function()
     backButton.addEventListener('click', function()
     {
         pokedexDetailToggle('flex', 'none');
+        detailCleanUp();
     });
 
-    // detailpagina schoonmaken functie als je terug gaat naar de pokedex of naar een andere pokemon gaat
+    nextButton.addEventListener('click', async function()
+    {
+        currentPokemonId += 1;
+        var pokemon = await getPokemonById(currentPokemonId)
+        detailCleanUp();
+        fillDetail(pokemon);
+        makePokemonArt(pokemon);
+    });
+
+    prevButton.addEventListener('click', async function()
+    {
+        currentPokemonId -= 1;
+        var pokemon = await getPokemonById(currentPokemonId)
+        detailCleanUp();
+        fillDetail(pokemon);
+        makePokemonArt(pokemon);
+    });
+
+    function detailCleanUp()
+    {
+        types.innerHTML = '';
+        abilities.innerHTML = '';
+    }
+
+    async function getPokemonById(id)
+    {
+        var request = fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+        .then(response => response.json())
+        .catch(e => requestError(e, 'pokemon'));
+
+        return request;
+    }
 
     // -------------------------------------------------------------------------------------------------------------
 
@@ -295,9 +337,18 @@ document.addEventListener('DOMContentLoaded', function()
         }
     });
 
-    function makePokemonArt(card)
+    function makePokemonArt(cardOrPokemon)
     {
-        const artUrl = card.dataset.art;
+        let artUrl;
+
+        if (cardOrPokemon && cardOrPokemon.dataset)
+        {
+            artUrl = cardOrPokemon.dataset.art;
+        } else if (cardOrPokemon && cardOrPokemon.sprites)
+        {
+            artUrl = cardOrPokemon.sprites.other['official-artwork'].front_default;
+        }
+
         if (!artUrl) return;
 
         pokemonArt.style.opacity = '0';

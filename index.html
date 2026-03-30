@@ -9,7 +9,9 @@
 </head>
 <body>
     <div class="background">
-        <img src="images/pokeball.png" alt="Pokéball" class="pokeball">
+        <div class="pokeball-wrapper">
+            <img src="images/pokeball.png" alt="Pokéball" class="pokeball">
+        </div>
         <img class="pokemon-art">
     </div>
     <div class="header">
@@ -24,7 +26,6 @@
         </div>
     </div>
     <div class="detail-container">
-        <!-- TOP BAR -->
         <div class="detail-top">
             <button class="back-btn">← Back</button>
             <div class="nav-buttons">
@@ -32,18 +33,13 @@
                 <button class="next-btn">Next →</button>
             </div>
         </div>
-        <!-- MAIN CONTENT -->
         <div class="detail-content">
-            <!-- LEFT: IMAGE -->
             <div class="detail-left">
                 <img class="pokemon-sprite">
             </div>
-            <!-- RIGHT: INFO -->
             <div class="detail-right">
                 <h1 id="pokemon-name"></h1>
-                <div class="types">
-                    
-                </div>
+                <div class="types"></div>
                 <div class="section">
                     <h3>Abilities</h3>
                     <ul class="abilities">
@@ -55,7 +51,7 @@
                     <div class="stats">
                         <div class="stat">
                             <span>HP</span>
-                            <div class="bar"><div id="hpBar"><!-- width opvullen met procent in javascript op basis van ... --></div></div>
+                            <div class="bar"><div id="hpBar"></div></div>
                             <span class="stat-value">35</span>
                         </div>
                         <div class="stat">
