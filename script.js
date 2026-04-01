@@ -8,18 +8,11 @@ document.addEventListener('DOMContentLoaded', function()
     let offset = 0;
     const limit = 18;
     let loading = false;
-    let isInitialLoad = true;
-    let width = screen.width;
+    let maxPokemon = 0;
 
     const observer = new IntersectionObserver(entries =>
     {
-        if (isInitialLoad)
-        {
-            isInitialLoad = false;
-            return;
-        }
-        // check of de maximale pokemon is bereikt (1350). als dat zo is, voer dan niet nog een batch uit
-        if(entries[0].isIntersecting && !loading)
+        if(entries[0].isIntersecting && !loading && offset < maxPokemon)
         {
             loading = true;
             loadMorePokemon();
@@ -38,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function()
     async function makeCard(data)
     {
         console.log("data: ", data);
+        maxPokemon = data.count;
 
         const pokemons = data.results.slice(0, limit);
         console.log("pokemons: ", pokemons);
@@ -56,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function()
             let name = pokeData.name.toUpperCase();
             let sprite = pokeData.sprites.front_default;
             let art = pokeData.sprites.other['official-artwork'].front_default;
-            // const sprite2 = pokeData.sprites.versions['generation-iv']['diamond-pearl'].front_default;
             console.log(name, sprite);
 
             let card = document.createElement('div');
@@ -94,13 +87,24 @@ document.addEventListener('DOMContentLoaded', function()
 
         loading = false;
 
-        // pas als de gebruiker omlaag scrolt OF als de navigatie op 18+ komt, voer dan de volgende batch uit
         nextBatch();
+        viewportHeightCheck();
     }
 
     function requestError(error, type)
     {
         console.error(`Error fetching ${type}:`, error);
+    }
+
+    function viewportHeightCheck()
+    {
+        const bodyHeight = document.body.scrollHeight;
+        const viewportHeight = window.innerHeight;
+
+        if (viewportHeight >= bodyHeight && !loading)
+        {
+            loadMorePokemon();
+        }
     }
 
     function nextBatch()
@@ -110,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function()
 
     function loadMorePokemon()
     {
+        loading = true;
         offset += limit;
         callAPI(offset, limit);
     }
@@ -133,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function()
 
     function fillDetail(pokemon)
     {
-        sprite.src = pokemon.sprites.front_default;
+        sprite.src = pokemon.sprites.versions['generation-iv']['diamond-pearl'].front_default;
 
         let pokemonId = pokemon.id;
         currentPokemonId = pokemonId;
@@ -153,8 +158,6 @@ document.addEventListener('DOMContentLoaded', function()
             let pokemonAbility = abilityData.ability.name;
             abilities.innerHTML += `<li class="ability">${pokemonAbility}</li>`;
         });
-
-        // verder met stats invullen (nummer en width procent)
 
         // const statMaxReference =
         // {
@@ -222,31 +225,24 @@ document.addEventListener('DOMContentLoaded', function()
         {
             event.preventDefault();
         }
-        
-        let containerWidth = responseContainer.offsetWidth;
 
         const cards = document.querySelectorAll('.pokemon-card');
 
-        // Set the initial card as selected
         cards[currentIndex].classList.add('card-selected');
         
         if (event.key === 'ArrowUp')
         {
-            // Reset the current card
             cards[currentIndex].classList.remove('card-selected');
 
-            // Rotate the pokeball
             currentRotation -= rotationValue*rowLength;
             pokeball.style.transform = `translate(-80px, -60px) scale(1.5) rotate(${currentRotation}deg)`;
 
-            // Move to the previous card
             currentIndex -= rowLength;
             if (currentIndex < 0)
             {
-                currentIndex = cards.length - 1; // Loop back to the last card
+                currentIndex = cards.length - 1;
             }
 
-            // Style the new current card
             cards[currentIndex].classList.add('card-selected');
 
             makePokemonArt(cards[currentIndex]);
@@ -259,21 +255,17 @@ document.addEventListener('DOMContentLoaded', function()
         }
         else if (event.key === 'ArrowRight')
         {
-            // Reset the current card
             cards[currentIndex].classList.remove('card-selected');
 
-            // Rotate the pokeball
             currentRotation += rotationValue;
             pokeball.style.transform = `translate(-80px, -60px) scale(1.5) rotate(${currentRotation}deg)`;
 
-            // Move to the next card
             currentIndex++;
             if (currentIndex >= cards.length)
             {
-                currentIndex = 0; // Loop back to the first card
+                currentIndex = 0;
             }
 
-            // Style the new current card
             cards[currentIndex].classList.add('card-selected');
 
             makePokemonArt(cards[currentIndex]);
@@ -286,21 +278,17 @@ document.addEventListener('DOMContentLoaded', function()
         }
         else if (event.key === 'ArrowDown')
         {
-            // Reset the current card
             cards[currentIndex].classList.remove('card-selected');
 
-            // Rotate the pokeball
             currentRotation += rotationValue*rowLength;
             pokeball.style.transform = `translate(-80px, -60px) scale(1.5) rotate(${currentRotation}deg)`;
 
-            // Move to the next card
             currentIndex += rowLength;
             if (currentIndex >= cards.length)
             {
-                currentIndex = 0; // Loop back to the first card
+                currentIndex = 0;
             }
 
-            // Style the new current card
             cards[currentIndex].classList.add('card-selected');
 
             makePokemonArt(cards[currentIndex]);
@@ -312,21 +300,17 @@ document.addEventListener('DOMContentLoaded', function()
             });
         } else if (event.key === 'ArrowLeft')
         {
-            // Reset the current card
             cards[currentIndex].classList.remove('card-selected');
 
-            // Rotate the pokeball
             currentRotation -= rotationValue;
             pokeball.style.transform = `translate(-80px, -60px) scale(1.5) rotate(${currentRotation}deg)`;
 
-            // Move to the previous card
             currentIndex--;
             if (currentIndex < 0)
             {
-                currentIndex = cards.length - 1; // Loop back to the last card
+                currentIndex = cards.length - 1;
             }
 
-            // Style the new current card
             cards[currentIndex].classList.add('card-selected');
 
             makePokemonArt(cards[currentIndex]);

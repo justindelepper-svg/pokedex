@@ -149,7 +149,6 @@ body
     gap: 20px;
     display: none;
 
-    /** TOP BAR **/
     .detail-top
     {
         display: flex;
@@ -174,14 +173,12 @@ body
         }
     }
 
-    /** MAIN CONTENT **/
     .detail-content
     {
         display: flex;
         gap: 40px;
         flex: 1;
 
-        /** LEFT **/
         .detail-left
         {
             display: flex;
@@ -196,7 +193,6 @@ body
             }
         }
 
-        /** RIGHT **/
         .detail-right
         {
             flex: 2;
@@ -209,7 +205,6 @@ body
                 font-size: 32px;
             }
 
-            /** TYPES **/
             .types
             {
                 display: flex;
@@ -314,7 +309,6 @@ body
                 }
             }
 
-            /** SECTIONS **/
             .section
             {
                 margin-top: 10px;
